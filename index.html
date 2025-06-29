@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClarifyIQ | Navigate Complexity</title>
+    <style>
+      :root {
+        --brand-blue: #4f6ff5;
+        --brand-green: #85c39d;
+        --dark-text: #333333;
+        --light-text: #555555;
+        --background-light: #ffffff;
+        --doc-bg: #fdfdfd;
+        --doc-border: #e0e0e0;
+        --doc-line: #f0f0f0;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--background-light);
+        color: var(--dark-text);
+        overflow-x: hidden;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* Reduced top padding */
+        padding: 1rem 2rem 3rem;
+        min-height: 83vh;
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .top-content {
+        max-width: 100%;
+        width: 100%;
+        max-width: 600px;
+        z-index: 10;
+        order: 1;
+      }
+
+      .logo-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .logo-svg {
+        /* Reverted logo size */
+        width: 80px;
+        height: 80px;
+      }
+
+      .concentric-circle-path {
+        stroke: var(--brand-blue);
+        stroke-width: 4;
+        fill: none;
+      }
+      .innermost-circle-fill {
+        stroke: var(--brand-green);
+        stroke-width: 5;
+        fill: none;
+      }
+      .brand-name {
+        /* Reverted font size */
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--dark-text);
+      }
+
+      /* New Separator Style */
+      .separator {
+        width: 580px;
+        height: 2px;
+        background-color: var(--doc-border);
+        margin: -1rem auto 1.5rem; /* Adjusted margins for placement */
+        border-radius: 1px;
+      }
+
+      .headline {
+        font-size: 2.8rem;
+        font-weight: bold;
+        margin-top: 3rem;
+        line-height: 1.2;
+      }
+
+      .subhead {
+        margin-top: 1.5rem;
+        font-size: 1.1rem;
+        color: var(--light-text);
+        max-width: 500px;
+        line-height: 1.6;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta {
+        margin-top: 2.5rem;
+      }
+
+      .cta button {
+        padding: 0.85rem 1.6rem;
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 0.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .cta button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .cta .signup {
+        background-color: var(--brand-blue);
+        color: white;
+      }
+
+      .cta .message {
+        background-color: #f2f2f2;
+        color: var(--dark-text);
+        border: 1px solid #ccc;
+      }
+
+      .bottom-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 800px;
+        order: 2;
+      }
+
+      .hero-graphic-svg {
+        width: 100%;
+        height: auto;
+      }
+
+      /* --- Modal Styles --- */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+      }
+
+      .modal-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 450px;
+        position: relative;
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.visible .modal-content {
+        transform: translateY(0);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--dark-text);
+      }
+
+      .close-button {
+        font-size: 1.5rem;
+        font-weight: bold;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #aaa;
+      }
+
+      .modal-body .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .modal-body label {
+        display: block;
+        text-align: left;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--light-text);
+      }
+
+      .modal-body input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box; /* Important for padding */
+      }
+
+      .modal-footer {
+        text-align: right;
+        margin-top: 1.5rem;
+      }
+
+      .modal-footer .error-message {
+        text-align: left;
+        color: #d9534f;
+        font-size: 0.9rem;
+        min-height: 1.2rem;
+      }
+
+      /* SVG Animation */
+      @keyframes draw-line {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes orbit {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes counter-orbit {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(-360deg);
+        }
+      }
+
+      @keyframes orbit-reverse {
+        from {
+          transform: rotate(360deg);
+        }
+        to {
+          transform: rotate(0deg);
+        }
+      }
+
+      .hero-graphic-svg .line-connector {
+        stroke-dasharray: 500;
+        stroke-dashoffset: 500;
+        animation: draw-line 2.5s ease-out forwards;
+      }
+
+      .orbiting-item {
+        transform-origin: 400px 300px; /* Center of the 800x600 SVG */
+      }
+
+      .doc-animator {
+        /* This group handles the counter-rotation to keep the doc upright */
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      .doc-group {
+        opacity: 0;
+        animation: fade-in 0.8s ease-out 1 forwards;
+      }
+
+      /* Set specific transform origins for each doc animator to rotate around its center */
+      .doc-reports-animator {
+        transform-origin: 65px 45px;
+      }
+      .doc-policy-animator {
+        transform-origin: 70px 35px;
+      }
+      .doc-claims-animator {
+        transform-origin: 75px 40px;
+      }
+      .doc-evidence-animator {
+        transform-origin: 65px 45px;
+      }
+      .doc-projects-animator {
+        transform-origin: 65px 35px;
+      }
+
+      /* INDIVIDUAL ANIMATIONS FOR DIFFERENT SPEEDS & DIRECTIONS */
+      .orbit-reports {
+        animation: orbit 35s linear infinite;
+      }
+      .doc-reports-animator {
+        animation-name: counter-orbit;
+        animation-duration: 35s;
+      }
+
+      .orbit-policy {
+        animation: orbit-reverse 50s linear infinite;
+      }
+      .doc-policy-animator {
+        animation-name: orbit;
+        animation-duration: 50s;
+      } /* Counter is normal orbit */
+
+      .orbit-claims {
+        animation: orbit 40s linear infinite;
+      }
+      .doc-claims-animator {
+        animation-name: counter-orbit;
+        animation-duration: 40s;
+      }
+
+      .orbit-evidence {
+        animation: orbit-reverse 60s linear infinite;
+      }
+      .doc-evidence-animator {
+        animation-name: orbit;
+        animation-duration: 60s;
+      } /* Counter is normal orbit */
+
+      .orbit-projects {
+        animation: orbit 45s linear infinite;
+      }
+      .doc-projects-animator {
+        animation-name: counter-orbit;
+        animation-duration: 45s;
+      }
+
+      /* Stagger delays for fade-in animations */
+      .doc-reports {
+        animation-delay: 0.8s;
+      }
+      .doc-policy {
+        animation-delay: 1s;
+      }
+      .doc-claims {
+        animation-delay: 1.2s;
+      }
+      .doc-evidence {
+        animation-delay: 1.4s;
+      }
+      .doc-projects {
+        animation-delay: 1.6s;
+      }
+
+      /* Stagger line animation delays */
+      .line-reports {
+        animation-delay: 0.7s;
+      }
+      .line-policy {
+        animation-delay: 0.9s;
+      }
+      .line-claims {
+        animation-delay: 1.1s;
+      }
+      .line-evidence {
+        animation-delay: 1.3s;
+      }
+      .line-projects {
+        animation-delay: 1.5s;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 2rem 1rem;
+        }
+        .headline {
+          font-size: 2.2rem;
+        }
+        .cta button {
+          display: block;
+          width: 90%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-content">
+        <div class="logo-title">
+          <svg
+            class="logo-svg"
+            viewBox="0 0 200 200"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>ClarifyIQ Labyrinth Logo</title>
+            <path
+              class="innermost-circle-fill"
+              stroke-linecap="round"
+              d="M 100,85 A 15,15 0 1,1 100,115 A 15,15 0 1,1 100,85 Z"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.42,129.07 L 107.47,144.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 41.94,147.47 L 52.62,136.81"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.58,129.07 A 30,30 0 0,1 70.93,107.42"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 A 30,30 0 0,1 115.31,74.2"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 158.06,52.53 A 75,75 0 0,1 158.06,147.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 25.37,92.51 A 75,75 0 0,1 92.51,25.37"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 73.9,136.66 L 63.19,147.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 L 73.9,63.34"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.48,40.47 L 107.47,55.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 129.07,107.42 A 30,30 0 0,1 125.8,115.31"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 115.31,125.8 A 30,30 0 0,1 107.42,129.07"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.58,129.07 A 30,30 0 0,1 84.69,125.8"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 74.2,115.31 A 30,30 0 0,1 70.93,107.42"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 70.93,92.58 A 30,30 0 0,1 74.2,84.69"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 A 30,30 0 0,1 92.58,70.93"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.42,70.93 A 30,30 0 0,1 115.31,74.2"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 125.8,84.69 A 30,30 0 0,1 129.07,92.58"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 144.38,107.47 A 45,45 0 0,1 136.66,126.1"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 126.1,136.66 A 45,45 0 0,1 107.47,144.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.53,144.38 A 45,45 0 0,1 73.9,136.66"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 63.34,126.1 A 45,45 0 0,1 55.62,107.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 55.62,92.53 A 45,45 0 0,1 63.34,73.9"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 73.9,63.34 A 45,45 0 0,1 92.53,55.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.47,55.62 A 45,45 0 0,1 126.1,63.34"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 136.66,73.9 A 45,45 0 0,1 144.38,92.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 159.53,107.48 A 60,60 0 0,1 147.38,136.81"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 136.81,147.38 A 60,60 0 0,1 107.48,159.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.52,159.53 A 60,60 0 0,1 63.19,147.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 52.62,136.81 A 60,60 0 0,1 40.47,107.48"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 40.47,92.52 A 60,60 0 0,1 52.62,63.19"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 63.19,52.62 A 60,60 0 0,1 92.52,40.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.48,40.47 A 60,60 0 0,1 136.81,52.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 147.38,63.19 A 60,60 0 0,1 159.53,92.52"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 174.63,107.49 A 75,75 0 0,1 158.06,147.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 147.47,158.06 A 75,75 0 0,1 107.49,174.63"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.51,174.63 A 75,75 0 0,1 52.53,158.06"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 41.94,147.47 A 75,75 0 0,1 25.37,107.49"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 25.37,92.51 A 75,75 0 0,1 41.94,52.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 52.53,41.94 A 75,75 0 0,1 92.51,25.37"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.49,25.37 A 75,75 0 0,1 147.47,41.94"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 158.06,52.53 A 75,75 0 0,1 174.63,92.51"
+            />
+          </svg>
+          <div class="brand-name">ClarifyIQ</div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="headline">
+          Understand your documents. Any domain. Any time.
+        </div>
+
+        <div class="subhead">
+          AI-powered document interpretation and schema extraction, tailored to
+          your domain—whether you're a researcher, regulator, analyst, or
+          advocate.
+        </div>
+
+        <div class="cta">
+          <button class="signup">Join our early access beta</button>
+          <button
+            class="message"
+            onclick="window.location.href='mailto:info@clarifyiq.ai'"
+          >
+            Message us
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom-content">
+        <svg
+          class="hero-graphic-svg"
+          viewBox="0 0 800 600"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>Diagram showing ClarifyIQ processing various documents</title>
+
+          <g
+            id="labyrinth-graphic-group"
+            transform="translate(400, 300) scale(0.9375) translate(-100, -100)"
+          >
+            <path
+              class="innermost-circle-fill"
+              stroke-linecap="round"
+              d="M 100,85 A 15,15 0 1,1 100,115 A 15,15 0 1,1 100,85 Z"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.42,129.07 L 107.47,144.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 41.94,147.47 L 52.62,136.81"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.58,129.07 A 30,30 0 0,1 70.93,107.42"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 A 30,30 0 0,1 115.31,74.2"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 158.06,52.53 A 75,75 0 0,1 158.06,147.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 25.37,92.51 A 75,75 0 0,1 92.51,25.37"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 73.9,136.66 L 63.19,147.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 L 73.9,63.34"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.48,40.47 L 107.47,55.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 129.07,107.42 A 30,30 0 0,1 125.8,115.31"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 115.31,125.8 A 30,30 0 0,1 107.42,129.07"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.58,129.07 A 30,30 0 0,1 84.69,125.8"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 74.2,115.31 A 30,30 0 0,1 70.93,107.42"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 70.93,92.58 A 30,30 0 0,1 74.2,84.69"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 84.69,74.2 A 30,30 0 0,1 92.58,70.93"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.42,70.93 A 30,30 0 0,1 115.31,74.2"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 125.8,84.69 A 30,30 0 0,1 129.07,92.58"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 144.38,107.47 A 45,45 0 0,1 136.66,126.1"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 126.1,136.66 A 45,45 0 0,1 107.47,144.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.53,144.38 A 45,45 0 0,1 73.9,136.66"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 63.34,126.1 A 45,45 0 0,1 55.62,107.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 55.62,92.53 A 45,45 0 0,1 63.34,73.9"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 73.9,63.34 A 45,45 0 0,1 92.53,55.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.47,55.62 A 45,45 0 0,1 126.1,63.34"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 136.66,73.9 A 45,45 0 0,1 144.38,92.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 159.53,107.48 A 60,60 0 0,1 147.38,136.81"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 136.81,147.38 A 60,60 0 0,1 107.48,159.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.52,159.53 A 60,60 0 0,1 63.19,147.38"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 52.62,136.81 A 60,60 0 0,1 40.47,107.48"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 40.47,92.52 A 60,60 0 0,1 52.62,63.19"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 63.19,52.62 A 60,60 0 0,1 92.52,40.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.48,40.47 A 60,60 0 0,1 136.81,52.62"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 147.38,63.19 A 60,60 0 0,1 159.53,92.52"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 174.63,107.49 A 75,75 0 0,1 158.06,147.47"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 147.47,158.06 A 75,75 0 0,1 107.49,174.63"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 92.51,174.63 A 75,75 0 0,1 52.53,158.06"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 41.94,147.47 A 75,75 0 0,1 25.37,107.49"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 25.37,92.51 A 75,75 0 0,1 41.94,52.53"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 52.53,41.94 A 75,75 0 0,1 92.51,25.37"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 107.49,25.37 A 75,75 0 0,1 147.47,41.94"
+            />
+            <path
+              class="concentric-circle-path"
+              stroke-linecap="round"
+              d="M 158.06,52.53 A 75,75 0 0,1 174.63,92.51"
+            />
+          </g>
+
+          <!-- Report Group (Angle: 270) -->
+          <g class="orbiting-item orbit-reports">
+            <line
+              class="line-connector line-reports"
+              x1="480"
+              y1="300"
+              x2="610"
+              y2="300"
+              stroke="var(--doc-border)"
+              stroke-width="2"
+            />
+            <g transform="translate(545, 255)">
+              <g class="doc-animator doc-reports-animator">
+                <g class="doc-group doc-reports">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="130"
+                    height="90"
+                    rx="8"
+                    fill="var(--doc-bg)"
+                    stroke="var(--doc-border)"
+                    stroke-width="1.5"
+                  />
+                  <text
+                    x="15"
+                    y="22"
+                    font-size="16"
+                    fill="var(--dark-text)"
+                    font-weight="600"
+                  >
+                    Reports
+                  </text>
+                  <path
+                    d="M 15 40 H 115 M 15 55 H 115 M 15 70 H 95"
+                    stroke="var(--doc-line)"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Policy Group (Angle: 342) -->
+          <g class="orbiting-item orbit-policy">
+            <line
+              class="line-connector line-policy"
+              x1="425"
+              y1="376"
+              x2="462"
+              y2="490"
+              stroke="var(--doc-border)"
+              stroke-width="2"
+            />
+            <g transform="translate(392, 455)">
+              <g class="doc-animator doc-policy-animator">
+                <g class="doc-group doc-policy">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="140"
+                    height="70"
+                    rx="8"
+                    fill="var(--doc-bg)"
+                    stroke="var(--doc-border)"
+                    stroke-width="1.5"
+                  />
+                  <text
+                    x="15"
+                    y="22"
+                    font-size="16"
+                    fill="var(--dark-text)"
+                    font-weight="600"
+                  >
+                    Policy
+                  </text>
+                  <path
+                    d="M 15 40 H 125 M 15 55 H 90"
+                    stroke="var(--doc-line)"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Claims Group (Angle: 54) -->
+          <g class="orbiting-item orbit-claims">
+            <line
+              class="line-connector line-claims"
+              x1="335"
+              y1="347"
+              x2="173"
+              y2="465"
+              stroke="var(--doc-border)"
+              stroke-width="2"
+            />
+            <g transform="translate(98, 425)">
+              <g class="doc-animator doc-claims-animator">
+                <g class="doc-group doc-claims">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="150"
+                    height="80"
+                    rx="8"
+                    fill="var(--doc-bg)"
+                    stroke-width="1.5"
+                  />
+                  <text
+                    x="15"
+                    y="22"
+                    font-size="16"
+                    fill="var(--dark-text)"
+                    font-weight="600"
+                  >
+                    Claims
+                  </text>
+                  <path
+                    d="M 15 40 H 135 M 15 55 H 135 M 15 70 H 80"
+                    stroke="var(--doc-line)"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Evidence Group (Angle: 126) -->
+          <g class="orbiting-item orbit-evidence">
+            <line
+              class="line-connector line-evidence"
+              x1="335"
+              y1="253"
+              x2="157"
+              y2="124"
+              stroke="var(--doc-border)"
+              stroke-width="2"
+            />
+            <g transform="translate(92, 79)">
+              <g class="doc-animator doc-evidence-animator">
+                <g class="doc-group doc-evidence">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="130"
+                    height="90"
+                    rx="8"
+                    fill="var(--doc-bg)"
+                    stroke="var(--doc-border)"
+                    stroke-width="1.5"
+                  />
+                  <text
+                    x="15"
+                    y="22"
+                    font-size="16"
+                    fill="var(--dark-text)"
+                    font-weight="600"
+                  >
+                    Evidence
+                  </text>
+                  <path
+                    d="M 15 40 H 115 M 15 55 H 115 M 15 70 H 95"
+                    stroke="var(--doc-line)"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Projects Group (Angle: 198) -->
+          <g class="orbiting-item orbit-projects">
+            <line
+              class="line-connector line-projects"
+              x1="324"
+              y1="275"
+              x2="229"
+              y2="244"
+              stroke="var(--doc-border)"
+              stroke-width="2"
+            />
+            <g transform="translate(164, 209)">
+              <g class="doc-animator doc-projects-animator">
+                <g class="doc-group doc-projects">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="130"
+                    height="70"
+                    rx="8"
+                    fill="var(--doc-border)"
+                    stroke-width="1.5"
+                  />
+                  <text
+                    x="15"
+                    y="22"
+                    font-size="16"
+                    fill="var(--dark-text)"
+                    font-weight="600"
+                  >
+                    Projects
+                  </text>
+                  <path
+                    d="M 15 40 H 115 M 15 55 H 75"
+                    stroke="var(--doc-line)"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- New Modal HTML -->
+    <div id="signup-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Join the Beta</h2>
+          <button id="close-modal-button" class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="email-input">Email Address</label>
+            <input
+              type="email"
+              id="email-input"
+              placeholder="you@example.com"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <p id="error-message" class="error-message"></p>
+          <button id="send-email-button" class="cta signup">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- New JavaScript -->
+    <script>
+      // Get all the necessary elements from the DOM
+      const signupButton = document.querySelector('.cta .signup');
+      const modalOverlay = document.getElementById('signup-modal');
+      const closeModalButton = document.getElementById('close-modal-button');
+      const sendEmailButton = document.getElementById('send-email-button');
+      const emailInput = document.getElementById('email-input');
+      const errorMessage = document.getElementById('error-message');
+
+      // Function to open the modal
+      const openModal = () => {
+        modalOverlay.classList.add('visible');
+      };
+
+      // Function to close the modal
+      const closeModal = () => {
+        modalOverlay.classList.remove('visible');
+        errorMessage.textContent = ''; // Clear any previous error messages
+      };
+
+      // Function to validate email format
+      const validateEmail = (email) => {
+        const re =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      };
+
+      // Function to handle sending the email
+      const handleSendEmail = () => {
+        const email = emailInput.value;
+
+        // Validate the email
+        if (!validateEmail(email)) {
+          errorMessage.textContent = 'Please enter a valid email address.';
+          return; // Stop the function if email is not valid
+        }
+
+        // If valid, clear any error message
+        errorMessage.textContent = '';
+
+        // Construct the mailto link
+        const subject = 'Early Access Beta Signup';
+        const body = `Please add the following email to the beta waitlist: ${email}`;
+        const mailtoLink = `mailto:info@clarifyiq.ai?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        // Open the user's default email client
+        window.location.href = mailtoLink;
+
+        // Close the modal after attempting to send
+        closeModal();
+      };
+
+      // Add event listeners
+      signupButton.addEventListener('click', openModal);
+      closeModalButton.addEventListener('click', closeModal);
+      sendEmailButton.addEventListener('click', handleSendEmail);
+
+      // Allow closing the modal by clicking on the overlay backdrop
+      modalOverlay.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) {
+          closeModal();
+        }
+      });
+
+      // Allow submitting with the Enter key
+      emailInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          handleSendEmail();
+        }
+      });
+    </script>
+  </body>
+</html>
